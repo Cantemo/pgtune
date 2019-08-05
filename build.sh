@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/bash -xe
 
 docker build -t pgtunebuild:el6 -f Dockerfile-el6 .
 docker build -t pgtunebuild:el7 -f Dockerfile-el7 .
