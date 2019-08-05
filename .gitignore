@@ -1,0 +1,4 @@
+buildroot/BUILD
+buildroot/RPMS
+buildroot/SRPMS
+*.rpm

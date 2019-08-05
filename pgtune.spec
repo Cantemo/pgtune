@@ -1,13 +1,13 @@
 Summary:	PostgreSQL Config Tuner
 Name:		pgtune
-Version:	0.9.2
-Release:	1%{?dist}
+Version:	0.9.4
+Release:	%{buildnumber}.cantemo%{?dist}
 License:	BSD
 Group:		Applications/Databases
 URL:		http://pgfoundry.org/projects/pgtune
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-Source0:	http://pgfoundry.org/frs/download.php/2445/%{name}-%{version}.tar.gz
+#Source0:	http://pgfoundry.org/frs/download.php/2445/%{name}-%{version}.tar.gz
 Patch0:		pgtune-settingsdir.patch
 Requires:	postgresql-server
 Buildarch:	noarch
@@ -17,7 +17,9 @@ pgtune takes the wimpy default postgresql.conf and expands the database server
 to be as powerful as the hardware it's being deployed on.
 
 %prep
-%setup -q -n %{name}-%{version}
+#%setup -q -n %{name}-%{version}
+cd %{_topdir}/BUILD
+(cd  %{_topdir}/.. && tar cf - . --exclude=buildroot) | tar xf -
 %patch0 -p0
 
 %build
@@ -35,7 +37,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(0644,root,root,0755)
-%doc TODO COPYRIGHT
+%doc TODO.rst COPYRIGHT
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/*
 %attr(755,root,root) %{_bindir}/pgtune
