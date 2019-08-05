@@ -1,3 +1,15 @@
 FROM centos:7
 
 RUN yum install -y rpm-build
+
+# Ugly hack to get around that rpmbuild requires a user to be present
+RUN adduser --uid 1000 user1000
+RUN adduser --uid 1001 user1001
+RUN adduser --uid 1002 user1002
+RUN adduser --uid 1003 user1003
+RUN adduser --uid 1004 user1004
+RUN adduser --uid 1005 user1005
+RUN adduser --uid 1006 user1006
+RUN adduser --uid 1007 user1007
+RUN adduser --uid 1008 user1008
+RUN adduser --uid 1009 user1009
