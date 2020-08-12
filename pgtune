@@ -516,6 +516,9 @@ def wizard_tune(config, options, settings):
         print("Error:  total memory not specified and unable to detect")
         sys.exit(1)
 
+    # Make sure total_memory is stored as int
+    total_memory = int(total_memory)
+
     # Memory allocation
     # Extract some values just to make the code below more compact
     # The base unit for memory types is the kB, so scale system memory to that
