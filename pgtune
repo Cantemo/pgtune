@@ -54,9 +54,9 @@ KB = 1024
 MB = 1024 * KB
 GB = 1024 * MB
 TB = 1024 * GB
-KB_PER_MB = MB / KB
-KB_PER_GB = GB / KB
-KB_PER_TB = TB / KB
+KB_PER_MB = MB // KB
+KB_PER_GB = GB // KB
+KB_PER_TB = TB // KB
 
 
 def total_mem():
@@ -527,8 +527,8 @@ def wizard_tune(config, options, settings):
 
     # TODO Validate that platform is on the supported list before using it
     if total_memory >= (256 * MB):
-        s['shared_buffers'] = {'web':mem / 4, 'oltp':mem / 4, 'dw':mem / 4,
-                               'mixed':mem / 4, 'desktop':mem / 16}[db_type]
+        s['shared_buffers'] = {'web':mem // 4, 'oltp':mem // 4, 'dw':mem // 4,
+                               'mixed':mem // 4, 'desktop':mem // 16}[db_type]
 
         # Limit shared_buffers to 512MB on Windows
         #
@@ -538,23 +538,23 @@ def wizard_tune(config, options, settings):
         # careful to respect that.  The unit can even change at compile time,
         # but there aren't any known platforms that use a non-default value.
         if options.platform=="Windows":
-            if s['shared_buffers'] > (512 * MB / KB):
-                s['shared_buffers'] = (512 * MB / KB)
+            if s['shared_buffers'] > (512 * MB // KB):
+                s['shared_buffers'] = (512 * MB // KB)
                 # TODO HINT about the issue on Windows
 
-        s['effective_cache_size'] = {'web':mem * 3 / 4, 'oltp':mem * 3 / 4, 'dw':mem * 3 / 4,
-                                     'mixed':mem * 3 / 4, 'desktop':mem / 4}[db_type]
+        s['effective_cache_size'] = {'web':mem * 3 // 4, 'oltp':mem * 3 // 4, 'dw':mem * 3 // 4,
+                                     'mixed':mem * 3 // 4, 'desktop':mem // 4}[db_type]
     
-        s['work_mem'] = {'web':mem / con, 'oltp':mem / con,'dw':mem / con / 2,
-                         'mixed':mem / con / 2,'desktop':mem / con / 6}[db_type]
+        s['work_mem'] = {'web':mem // con, 'oltp':mem // con,'dw':mem // con // 2,
+                         'mixed':mem // con / 2,'desktop':mem // con // 6}[db_type]
     
-        s['maintenance_work_mem'] = {'web':mem / 16, 'oltp':mem / 16,'dw':mem / 8,
-                                   'mixed':mem / 16,'desktop':mem / 16}[db_type]
+        s['maintenance_work_mem'] = {'web':mem // 16, 'oltp':mem // 16,'dw':mem // 8,
+                                   'mixed':mem // 16,'desktop':mem // 16}[db_type]
         
         # Cap maintenance RAM at 2GB on servers with lots of memory
         # (Remember that the setting is in terms of kB here)
         if s['maintenance_work_mem'] > (2 * GB / KB):
-            s['maintenance_work_mem'] = 2 * GB / KB
+            s['maintenance_work_mem'] = 2 * GB // KB
   
     else:
         # TODO HINT about this tool not being optimal for low memory systems
@@ -565,13 +565,13 @@ def wizard_tune(config, options, settings):
         s['checkpoint_segments'] = {'web':32, 'oltp':64, 'dw':128,
                                     'mixed':32, 'desktop':3}[db_type]
     else:
-        s['min_wal_size'] = {'web': (1 * GB / KB), 'oltp': (2 * GB / KB),
-                             'dw': (4 * GB / KB), 'desktop': (100 * MB / KB),
-                             'mixed': (1 * GB / KB)}[db_type]
+        s['min_wal_size'] = {'web': (1 * GB // KB), 'oltp': (2 * GB // KB),
+                             'dw': (4 * GB // KB), 'desktop': (100 * MB // KB),
+                             'mixed': (1 * GB // KB)}[db_type]
 
-        s['max_wal_size'] = {'web': (2 * GB / KB), 'oltp': (4 * GB / KB),
-                             'dw': (8 * GB / KB), 'desktop': (100 * MB / KB),
-                             'mixed': (2 * GB / KB)}[db_type]
+        s['max_wal_size'] = {'web': (2 * GB // KB), 'oltp': (4 * GB // KB),
+                             'dw': (8 * GB // KB), 'desktop': (100 * MB // KB),
+                             'mixed': (2 * GB // KB)}[db_type]
 
     s['checkpoint_completion_target'] = {'web':0.7, 'oltp':0.9, 'dw':0.9,
                                          'mixed':0.9, 'desktop':0.5}[db_type]
@@ -580,14 +580,14 @@ def wizard_tune(config, options, settings):
     # in 9.1, where it's set to 3% of shared_buffers up to a maximum of 16MB.
     # Starting with 9.1, the default value of -1 should be fine.
     if float(options.db_version) < 9.1:
-        s['wal_buffers'] = 3 * s['shared_buffers'] / 100
-        if s['wal_buffers'] > 16*MB / KB:
-            s['wal_buffers'] = 16*MB / KB
+        s['wal_buffers'] = 3 * s['shared_buffers'] // 100
+        if s['wal_buffers'] > 16*MB // KB:
+            s['wal_buffers'] = 16*MB // KB
         # It's nice if wal_buffers is an even 16MB if it's near that number.  Since
         # that is a common case on Windows, where shared_buffers is clipped to 512MB,
         # round upwards in that situation
         if s['wal_buffers'] > 14*MB / KB and s['wal_buffers'] < 16*MB / KB:
-            s['wal_buffers'] = 16*MB / KB
+            s['wal_buffers'] = 16*MB // KB
 
     # TODO Eliminate setting this needlessly when on a version that
     # defaults to 100  
