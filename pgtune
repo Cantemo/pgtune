@@ -450,16 +450,16 @@ class PGSettings(object):
         if self.memory_unit(name):
             if value.endswith('kB'):
                 internal = int(value.rstrip('kB'))
-                internal = internal / self.memory_divisor(name)
+                internal = internal // self.memory_divisor(name)
             elif value.endswith('MB'):
                 internal = int(value.rstrip('MB'))
-                internal = internal * KB_PER_MB / self.memory_divisor(name)
+                internal = internal * KB_PER_MB // self.memory_divisor(name)
             elif value.endswith('GB'):
                 internal = int(value.rstrip('GB'))
-                internal = internal * KB_PER_GB / self.memory_divisor(name)
+                internal = internal * KB_PER_GB // self.memory_divisor(name)
             elif value.endswith('TB'):
                 internal = int(value.rstrip('TB'))
-                internal = internal * KB_PER_TB / self.memory_divisor(name)
+                internal = internal * KB_PER_TB // self.memory_divisor(name)
             else:
                 internal = int(value)        
         else:        
