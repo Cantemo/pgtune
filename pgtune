@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 """
 pgtune
 
@@ -319,14 +319,14 @@ class PGConfigFile(object):
         fout.writelines(['%s\n' % line.original_line for line in self.config_lines])
 
     def debug_print_input(self):
-        print "Original file:"
+        print("Original file:")
         for l in self.config_lines:
-            print str(l)
+            print(str(l))
 
     def debug_print_settings(self):
-        print "Settings listing:"
-        for k, line in self.param_to_line.items():
-            print '%s = %s' %(k, line.value())
+        print("Settings listing:")
+        for k, line in list(self.param_to_line.items()):
+            print('%s = %s' %(k, line.value()))
 
 
 class PGSettings(object):
@@ -361,7 +361,7 @@ class PGSettings(object):
         reader = csv.DictReader(open(setting_dump_file), setting_columns, delimiter="\t")
         for d in reader:
             # Convert nulls into blanks
-            for key in d.keys():
+            for key in list(d.keys()):
                 if d[key] == '\\N':
                     d[key] = ""
         
@@ -382,8 +382,8 @@ class PGSettings(object):
             self.param_to_dict[d['name']] = d
     
     def debug_print_settings(self):
-        for key in self.param_to_dict.keys():
-            print "key=", key, " value=", self.param_to_dict[key]
+        for key in list(self.param_to_dict.keys()):
+            print("key=", key, " value=", self.param_to_dict[key])
 
     def min_val(self, setting):
         return (self.param_to_dict[setting])['min_val']
@@ -497,7 +497,7 @@ def wizard_tune(config, options, settings):
     try:
         s['max_connections'] = {'web':200, 'oltp':300, 'dw':20, 'mixed':100, 'desktop':5}[db_type]
     except KeyError:
-        print "Error:  unexpected setting for db_type"
+        print("Error:  unexpected setting for db_type")
         sys.exit(1)
   
     # Now that we've screened for that, we know we've got a good db_type and
@@ -513,7 +513,7 @@ def wizard_tune(config, options, settings):
     if total_memory is None:
         total_memory = total_mem()
     if total_memory is None:
-        print "Error:  total memory not specified and unable to detect"
+        print("Error:  total memory not specified and unable to detect")
         sys.exit(1)
 
     # Memory allocation
@@ -604,7 +604,7 @@ def wizard_tune(config, options, settings):
     config.identify_session("")
     
     # Write the new settings out
-    for key in s.keys():
+    for key in list(s.keys()):
         value = s[key]
         # TODO Make this logic part of the config class, so this
         # function doesn't need to be passed settings
@@ -660,8 +660,8 @@ def read_options(program_args):
         options.input_config=args[1]
     
     if options.debug == True:
-        print "Command line options:  ",options
-        print "Command line arguments:  ",args
+        print("Command line options:  ",options)
+        print("Command line arguments:  ",args)
     
     return options, args, parser
 
@@ -675,14 +675,14 @@ def main(program_args):
       
     configFile = options.input_config
     if configFile is None:
-        print >> sys.stderr,"Can't do anything without an input config file; try --help"
+        print("Can't do anything without an input config file; try --help", file=sys.stderr)
         parser.print_help()
         return(1)
 
     # Determine version of PostgreSQL to target
     db_version = options.db_version   
     if db_version is None:
-        print "Error:  database version not specified and unable to detect"
+        print("Error:  database version not specified and unable to detect")
         sys.exit(1)
           
     config = PGConfigFile(configFile)
@@ -690,7 +690,7 @@ def main(program_args):
   
     if options.debug == True:  
         config.debug_print_input()
-        print
+        print()
         config.debug_print_settings()
   
     if options.settings_dir is None:
