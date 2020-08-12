@@ -417,13 +417,13 @@ class PGSettings(object):
             # values, that value needs to be rounded appropriately if you want
             # it to show up as an even number of MB, GB or TB.
             if value % KB_PER_TB == 0:
-                value = value / KB_PER_TB
+                value = value // KB_PER_TB
                 unit = "TB"
             elif value % KB_PER_GB == 0:
-                value = value / KB_PER_GB
+                value = value // KB_PER_GB
                 unit = "GB"
             elif (value % KB_PER_MB == 0):
-                value = value / KB_PER_MB
+                value = value // KB_PER_MB
                 unit = "MB"
             else:
                 unit = "kB"
@@ -522,7 +522,7 @@ def wizard_tune(config, options, settings):
     # Memory allocation
     # Extract some values just to make the code below more compact
     # The base unit for memory types is the kB, so scale system memory to that
-    mem = int(total_memory) / KB
+    mem = int(total_memory) // KB
     con = int(s['max_connections'])
 
     # TODO Validate that platform is on the supported list before using it
