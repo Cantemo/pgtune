@@ -1,5 +1,10 @@
 FROM centos:8
 
+# CentOS 8 is discontinued
+RUN sed -i 's/^mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+# switch to vault
+RUN sed -i 's|^#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
 RUN yum install -y rpm-build
 
 # Ugly hack to get around that rpmbuild requires a user to be present
