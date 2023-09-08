@@ -1,6 +1,6 @@
-FROM rockylinux:8
+FROM rockylinux:9
 
-RUN yum install -y rpm-build
+RUN dnf install -y rpm-build
 
 # Ugly hack to get around that rpmbuild requires a user to be present
 RUN adduser --uid 1000 user1000
