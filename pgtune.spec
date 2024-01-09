@@ -19,7 +19,7 @@ to be as powerful as the hardware it's being deployed on.
 %prep
 #%setup -q -n %{name}-%{version}
 cd %{_topdir}/BUILD
-(cd  %{_topdir}/.. && tar --exclude=buildroot cf - .) | tar xf -
+(cd  %{_topdir}/.. && tar --exclude=buildroot -cf - .) | tar -xf -
 %patch0 -p0
 
 %build
